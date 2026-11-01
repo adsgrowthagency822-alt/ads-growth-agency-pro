@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ADS GROWTH AGENCY PRO</title>
+<style>
+:root{--bg:#07111f;--panel:#101d2e;--line:#26364d;--green:#a3ff58;--muted:#a9b8ca}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#14243a,#07111f 55%);color:#f8fafc;font-family:Arial,sans-serif}
+header{display:flex;justify-content:space-between;align-items:center;padding:22px max(5%,calc((100% - 1100px)/2));border-bottom:1px solid #23334a}
+.logo{font-weight:900;letter-spacing:1px}.logo span{color:var(--green)}button,.btn{border:0;background:var(--green);color:#07111f;font-weight:800;padding:12px 18px;border-radius:10px;cursor:pointer;text-decoration:none}
+main{max-width:1100px;margin:auto;padding:48px 20px}.hero{text-align:center;padding:35px 0 55px}.tag{color:var(--green);font-weight:bold}.hero h1{font-size:clamp(38px,7vw,68px);line-height:1.05;margin:16px 0}.hero p{max-width:700px;margin:0 auto 25px;color:var(--muted);font-size:18px;line-height:1.6}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.panel,.plan{background:rgba(16,29,46,.95);border:1px solid var(--line);border-radius:18px;padding:22px}.plan h3{margin:0 0 8px}.price{font-size:34px;font-weight:900;color:var(--green)}.muted{color:var(--muted)}.plan ul{padding-left:20px;line-height:1.9;color:#d6e0ec}.section{margin:35px 0}.section h2{font-size:28px}.row{display:flex;gap:10px;flex-wrap:wrap}.field{width:100%;padding:13px;border-radius:9px;border:1px solid #34465f;background:#081525;color:white;margin:7px 0 14px}.small{font-size:13px;color:var(--muted)}.hidden{display:none!important}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.tabs button{background:#1c2c42;color:white}.tabs button.active{background:var(--green);color:#07111f}.notice{padding:12px;border-radius:10px;background:#17283c;margin:12px 0;white-space:pre-wrap}.page-item{padding:12px;border:1px solid var(--line);border-radius:10px;margin:8px 0}.footer{text-align:center;color:#8fa2b9;padding:35px}
+@media(max-width:800px){.grid{grid-template-columns:1fr}.hero{padding-top:20px}header{padding:18px 5%}main{padding:25px 14px}}
+</style>
+</head>
+<body>
+<header><div class="logo">ADS GROWTH <span>AGENCY PRO</span></div><div class="row"><button onclick="showAuth('login')">Login</button><button onclick="showAuth('register')">Sign up</button></div></header>
+<main>
+<section class="hero"><div class="tag">GROW YOUR BUSINESS ONLINE</div><h1>Build. Publish.<br><span style="color:var(--green)">Grow Faster.</span></h1><p>Create mobile-friendly landing pages, collect WhatsApp leads and understand your real visitors from one simple dashboard.</p><a class="btn" href="#plans">View Monthly Plans</a></section>
+<section class="section"><h2>Everything in one place</h2><div class="grid">
+<div class="panel"><h3>Landing Page Builder</h3><p class="muted">Create product pages with a headline, image, description and WhatsApp call-to-action.</p></div>
+<div class="panel"><h3>Visitor Analytics</h3><p class="muted">See recorded visits, leads and clicks from your published pages.</p></div>
+<div class="panel"><h3>Click Protection</h3><p class="muted">Flag some automated-looking traffic for review. Detection is not perfect and may miss or flag genuine visits.</p></div>
+</div></section>
+<section class="section" id="plans"><h2>Monthly plans</h2><p class="muted">Pay with USDT on the TRON TRC20 network. One payment activates 30 days; recurring automatic deductions are not supported.</p>
+<div class="grid" id="plansGrid"></div></section>
+
+<section class="section panel hidden" id="authPanel"><h2 id="authTitle">Login</h2><input class="field" id="name" placeholder="Your name"><input class="field" id="email" type="email" placeholder="Email"><input class="field" id="password" type="password" placeholder="Password (10+ characters)"><div class="row"><button onclick="submitAuth()">Continue</button><button onclick="hideAuth()" style="background:#34465f;color:white">Close</button></div><div id="authMsg" class="notice hidden"></div></section>
+
+<section class="section panel hidden" id="dashboard">
+<div class="row" style="justify-content:space-between;align-items:center"><h2>Customer Dashboard</h2><button onclick="logout()" style="background:#34465f;color:white">Logout</button></div>
+<div class="tabs"><button class="active" onclick="tab('builder',this)">Page Builder</button><button onclick="tab('payment',this)">USDT Payment</button><button onclick="tab('analytics',this)">Analytics</button><button onclick="tab('admin',this)" id="adminTab" class="hidden">Admin</button></div>
+<div id="builderTab">
+<h3>Create landing page</h3><input class="field" id="pTitle" placeholder="Page title"><input class="field" id="pHeadline" placeholder="Main headline"><textarea class="field" id="pDescription" placeholder="Product or service description" rows="3"></textarea><input class="field" id="pImage" placeholder="Product image URL (https://...)"><input class="field" id="pWhatsApp" placeholder="WhatsApp number with country code, digits only"><input class="field" id="pButton" placeholder="Button text" value="Contact on WhatsApp"><input class="field" id="pPixel" placeholder="Meta Pixel ID (optional)"><button onclick="createPage()">Save page</button><div id="pagesList"></div>
+</div>
+<div id="paymentTab" class="hidden"><h3>Pay with USDT TRC20</h3><p class="muted">Send the exact plan amount to the receiving address. Verify the address and network in your wallet before sending.</p><div class="notice"><b>Network:</b> TRON (TRC20)<br><b>Wallet:</b> <span id="walletAddress"></span><br><button onclick="copyWallet()" style="margin-top:8px">Copy address</button></div><div id="paymentPlans"></div><input class="field" id="txid" placeholder="Paste 64-character transaction ID (TxID)"><button onclick="verifyPayment()">Verify payment</button><div id="payMsg" class="notice hidden"></div><p class="small">The server checks a confirmed TRON transaction and the official USDT TRC20 contract. Never share your recovery phrase or private key.</p></div>
+<div id="analyticsTab" class="hidden"><h3>Your page analytics</h3><button onclick="loadAnalytics()">Refresh analytics</button><div id="analyticsList"></div></div>
+<div id="adminTabContent" class="hidden"><h3>Admin overview</h3><button onclick="loadAdmin()">Refresh</button><div id="adminStats" class="notice"></div></div>
+</section>
+</main><div class="footer">© 2026 ADS GROWTH AGENCY PRO</div>
+<script>
+let token=localStorage.getItem("agp_token"), authMode="login", plans={}, selectedPlan="basic";
+const $=id=>document.getElementById(id);
+function msg(id,text){$(id).textContent=text;$(id).classList.remove("hidden")}
+async function api(url,opts={}){opts.headers={...(opts.headers||{}),...(token?{Authorization:"Bearer "+token}:{})};if(opts.body && typeof opts.body!=="string"){opts.headers["Content-Type"]="application/json";opts.body=JSON.stringify(opts.body)}const r=await fetch(url,opts);const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.error||"Request failed");return d}
+async function init(){try{const c=await api("/api/config");plans=c.plans;$("walletAddress").textContent=c.receiveAddress;renderPlans();if(token){const me=await api("/api/me");$("dashboard").classList.remove("hidden");if(me.user.role==="admin")$("adminTab").classList.remove("hidden");loadPages()}}catch(e){console.error(e)}}
+function renderPlans(){const names=Object.entries(plans);$("plansGrid").innerHTML=names.map(([k,p])=>`<div class="plan"><h3>${p.name}</h3><div class="price">$${p.price}<span class="small"> / 30 days</span></div><ul>${p.features.map(x=>`<li>${x}</li>`).join("")}</ul><button onclick="choosePlan('${k}')">Choose plan</button></div>`).join("");$("paymentPlans").innerHTML=names.map(([k,p])=>`<div class="page-item"><b>${p.name}</b> — $${p.price} USDT <button onclick="choosePlan('${k}')">Select</button></div>`).join("")}
+function choosePlan(k){selectedPlan=k;$("dashboard").classList.remove("hidden");tab("payment",document.querySelectorAll(".tabs button")[1]);$("payMsg").classList.add("hidden");$("paymentTab").scrollIntoView({behavior:"smooth"})}
+function showAuth(mode){authMode=mode;$("authTitle").textContent=mode==="login"?"Login":"Create account";$("name").classList.toggle("hidden",mode==="login");$("authPanel").classList.remove("hidden")}
+function hideAuth(){$("authPanel").classList.add("hidden")}
+async function submitAuth(){try{const d=await api("/api/auth/"+authMode,{method:"POST",body:{name:$("name").value,email:$("email").value,password:$("password").value}});token=d.token;localStorage.setItem("agp_token",token);$("dashboard").classList.remove("hidden");hideAuth();init()}catch(e){msg("authMsg",e.message)}}
+function logout(){localStorage.removeItem("agp_token");token=null;location.reload()}
+function tab(name,btn){["builder","payment","analytics","adminTabContent"].forEach(x=>$(x).classList.add("hidden"));$(name==="admin"?"adminTabContent":name+"Tab").classList.remove("hidden");document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));if(btn)btn.classList.add("active")}
+async function createPage(){try{const p=await api("/api/pages",{method:"POST",body:{title:$("pTitle").value,headline:$("pHeadline").value,description:$("pDescription").value,imageUrl:$("pImage").value,whatsappNumber:$("pWhatsApp").value,buttonText:$("pButton").value,pixelId:$("pPixel").value}});$("pTitle").value="";await loadPages();alert("Saved. Choose Publish in your page list after your subscription is active.")}catch(e){alert(e.message)}}
+async function loadPages(){try{const pages=await api("/api/pages");$("pagesList").innerHTML=pages.map(p=>`<div class="page-item"><b>${escapeHtml(p.title)}</b><br><span class="small">/${p.slug} · ${p.published?"Published":"Draft"}</span><br><button onclick="publishPage(${p.id})">Publish</button> <a href="/p/${encodeURIComponent(p.slug)}" target="_blank" style="color:var(--green)">Open page</a></div>`).join("")||"<p class='muted'>No pages yet.</p>"}catch(e){console.log(e)}}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+async function publishPage(id){try{const d=await api(`/api/pages/${id}/publish`,{method:"POST"});alert("Published: "+location.origin+d.url);loadPages()}catch(e){alert(e.message)}}
+async function verifyPayment(){try{msg("payMsg","Checking confirmed TRON transaction...");const d=await api("/api/payments/verify",{method:"POST",body:{plan:selectedPlan,txid:$("txid").value.trim()}});msg("payMsg",d.message+" Amount: "+d.amount+" USDT");}catch(e){msg("payMsg",e.message)}}
+function copyWallet(){navigator.clipboard.writeText($("walletAddress").textContent).then(()=>alert("Wallet address copied")).catch(()=>alert("Please select and copy the wallet address."))}
+async function loadAnalytics(){try{const rows=await api("/api/analytics");$("analyticsList").innerHTML=rows.map(x=>`<div class="page-item"><b>${escapeHtml(x.title)}</b><br>Visits: ${x.visits} · Leads: ${x.leads} · Events: ${x.events} · Suspicious: ${x.suspicious}</div>`).join("")||"No analytics yet."}catch(e){alert(e.message)}}
+async function loadAdmin(){try{const d=await api("/api/admin/overview");$("adminStats").textContent=`Customers: ${d.users}\nPages: ${d.pages}\nVerified payments: ${d.payments}\nTotal received: ${d.usdt} USDT\nTracked events: ${d.events}\nSuspicious events flagged: ${d.suspicious}`}catch(e){alert(e.message)}}
+init();
+</script></body>
+  </html>
